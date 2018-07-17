@@ -1,6 +1,7 @@
-version 0.5
+version 0.6
 once edit 
 pc edit 1
 online edit 
 pc edit 2
 pc edit 3
+pc edit 4
