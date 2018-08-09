@@ -29,7 +29,7 @@ const boost::asio::ip::tcp::endpoint GetLocal();//参考CIOClient
 ```
 ---
 ## PeerNet 简述
-PeerNet为CNetwork的基类CMvPeerNet的基类，基础类；
+PeerNet为基础类；定义了基本peernet的基本行为（peer配置、移除无效或错误的peer），具体构建由CNetwrok类完成。
 
 |源文件  	            |      类            |       其他|
 | ---------------------|-------------------|----------|
@@ -55,7 +55,43 @@ PeerNet为CNetwork的基类CMvPeerNet的基类，基础类；
 #### 主要函数
 
 ```cpp
-
+virtual void HandlePeerWriten(CPeer *pPeer);//获取peer写入
+void EnterLoop();
+void LeaveLoop();
+void HeartBeat();
+void Timeout(uint64 nNonce,uint32 nTimerId);
+std::size_t GetMaxOutBoundCount();
+bool ClientAccepted(const boost::asio::ip::tcp::endpoint& epService,CIOClient *pClient);
+bool ClientConnected(CIOClient *pClient);
+void ClientFailToConnect(const boost::asio::ip::tcp::endpoint& epRemote);
+void HostResolved(const CNetHost& host,const boost::asio::ip::tcp::endpoint& ep);
+CPeer* AddNewPeer(CIOClient *pClient,bool fInBound);
+void RewardPeer(CPeer *pPeer,const CEndpointManager::Bonus& bonus);
+void RemovePeer(CPeer *pPeer,const CEndpointManager::CloseReason& reason);
+CPeer* GetPeer(uint64 nNonce);
+void AddNewNode(const CNetHost& host);
+void AddNewNode(const boost::asio::ip::tcp::endpoint& epNode,
+                const std::string& strName = "",const boost::any& data = boost::any());
+void RemoveNode(const CNetHost& host);
+void RemoveNode(const boost::asio::ip::tcp::endpoint& epNode);
+std::string GetNodeName(const boost::asio::ip::tcp::endpoint& epNode);
+bool GetNodeData(const boost::asio::ip::tcp::endpoint& epNode,boost::any& data); 
+bool SetNodeData(const boost::asio::ip::tcp::endpoint& epNode,const boost::any& data);
+void RetrieveGoodNode(std::vector<CNodeAvail>& vGoodNode,int64 nActiveTime,std::size_t nMaxCount);
+virtual std::string GetLocalIP();
+virtual CPeer* CreatePeer(CIOClient *pClient,uint64 nNonce,bool fInBound);
+virtual void DestroyPeer(CPeer* pPeer);
+virtual CPeerInfo* GetPeerInfo(CPeer* pPeer,CPeerInfo* pInfo = NULL);
+bool HandleEvent(CWalleveEventPeerNetGetIP& eventGetIP); 
+bool HandleEvent(CWalleveEventPeerNetGetCount& eventGetCount); 
+bool HandleEvent(CWalleveEventPeerNetGetPeers& eventGetPeers); 
+bool HandleEvent(CWalleveEventPeerNetAddNode& eventAddNode); 
+bool HandleEvent(CWalleveEventPeerNetRemoveNode& eventRemoveNode); 
+bool HandleEvent(CWalleveEventPeerNetGetBanned& eventGetBanned); 
+bool HandleEvent(CWalleveEventPeerNetSetBan& eventSetBan); 
+bool HandleEvent(CWalleveEventPeerNetClrBanned& eventClrBanned);
+bool HandleEvent(CWalleveEventPeerNetReward& eventReward);
+bool HandleEvent(CWalleveEventPeerNetClose& eventClose);
 ```
 
 ## CMvPeer简述
@@ -97,7 +133,7 @@ PeerNet为CNetwork的基类CMvPeerNet的基类，基础类；
 
 ```
 
-CNetwork
+上层组网主要是靠 CNetwork，包括
 
 
 |整理者|日期|
