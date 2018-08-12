@@ -58,7 +58,7 @@ PeerNet为基础类；定义了基本peernet的基本行为（peer配置、移�
 virtual void HandlePeerWriten(CPeer *pPeer);//获取peer写入
 void EnterLoop();//获取配置中的peer列表，并建立连接
 void LeaveLoop();//断开所有连接中的peer,停止p2pnet
-void HeartBeat();//心跳
+void HeartBeat();//获取一个节点,连接
 void Timeout(uint64 nNonce,uint32 nTimerId);//节点超时移除
 bool ClientAccepted(const boost::asio::ip::tcp::endpoint& epService,CIOClient *pClient);
 bool ClientConnected(CIOClient *pClient);
@@ -95,15 +95,15 @@ bool HandleEvent(CWalleveEventPeerNetClose& eventClose);
 
 ## CEndpointManager简述
 ---
-////
+对节点进行管理,防止DDOS攻击等
 
 |源文件|类 | 描述|
 | ------------|------------|----------|
 |epmngr.h,epmngr.cpp   |CEndpointManager   |  |
-||CConnAttempt|工具类,用于稳定尝试间隔|
-||CAddressStatus|地址状态|
-||CAddressBanned||
-||CNodeAvail||
+||CConnAttempt|工具类,用于控制尝试间隔|
+||CAddressStatus|地址状态,控制尝试链接的间隔,包含频繁访问惩罚|
+||CAddressBanned|实体类,被禁止访问的地址|
+||CNodeAvail|实体类,|
 
 ### 主要变量及函数
 #### 主要变量
@@ -111,7 +111,15 @@ bool HandleEvent(CWalleveEventPeerNetClose& eventClose);
 |类	|变量名称	|类型		|描述|
 |-------|---------------|---------------|----------------------------------|
 |CEndpointManager|mngrNode|CNodeManager|节点管理对象|
-||mapAddressStatus|std::map\<boost::asio::ip::address,CAddressStatus>||
+||mapAddressStatus|std::map\<address,CAddressStatus>|地址状态|
+|CAddressStatus|nScore|int |评分,评估惩罚-500到+100|
+||nLastSeen|longlong|上次尝试时间|
+||nBanTo|longlong|禁止到_时间|
+||connAttempt|CConnAttempt|稳定访问间隔|
+||nConnections|int|尝试计数|
+|CAddressBanned|addrBanned|boost::asio::ip::address|禁止地址|
+||nScore|int|评分|
+||nBanTime|longlong|禁止到_时间|
 ##### 枚举
 ```cpp
 //关闭原因枚举
@@ -140,11 +148,75 @@ enum {
   }; 
 ```
 #### 主要函数
-##### CConnAttempt
+##### CConnAttempt类
 ```cpp
-bool Attempt(int64 ts);//限制流量,稳定访问间隔,预防ddos
+bool Attempt(int64 ts);//限制流量,控制访问间隔,预防ddos
 ```
-##### CAddressStatus
+##### CAddressStatus类
+```cpp
+bool InBoundAttempt(int64 ts);//尝试访问
+void Reward(int nPoints,int64 ts);//奖励,增加评分,减少访问间隔
+void Penalize(int nPoints,int64 ts);//惩罚,降低,增加访问间隔+50
+```
+##### CEndpointManager类
+```cpp
+int  GetEndpointScore(const boost::asio::ip::tcp::endpoint& ep);//获取制定地址评分
+void GetBanned(std::vector<CAddressBanned>& vBanned);//获取禁止访问的地址列表
+void SetBan(std::vector<boost::asio::ip::address>& vAddrToBan,int64 nBanTime);//禁止地址
+void ClearBanned(std::vector<boost::asio::ip::address>& vAddrToClear);//为列表中的地址解除禁止访问
+void ClearAllBanned();//解除所有禁止地址
+
+void AddNewOutBound(const boost::asio::ip::tcp::endpoint& ep,const std::string& strName,
+                    const boost::any& data);//添加新节点
+void RemoveOutBound(const boost::asio::ip::tcp::endpoint& ep);//移除节点
+std::string GetOutBoundName(const boost::asio::ip::tcp::endpoint& ep);//获取节点名称
+bool GetOutBoundData(const boost::asio::ip::tcp::endpoint& ep,boost::any& dataRet);//获取节点数据
+bool SetOutBoundData(const boost::asio::ip::tcp::endpoint& ep,const boost::any& dataIn);//设置节点数据
+bool FetchOutBound(boost::asio::ip::tcp::endpoint& ep);//获取一个节点
+bool AcceptInBound(const boost::asio::ip::tcp::endpoint& ep);//接受一个节点
+void RewardEndpoint(const boost::asio::ip::tcp::endpoint& ep,Bonus bonus);//奖励一个节点,降低访问延时
+void CloseEndpoint(const boost::asio::ip::tcp::endpoint& ep,CloseReason reason);//惩罚一个节点
+void RetrieveGoodNode(std::vector<CNodeAvail>& vGoodNode,
+                        int64 nActiveTime,std::size_t nMaxCount);//重新获取好节点
+void CleanInactiveAddress();//清除不活跃的地址
+```
+---
+## CNodeManager简述
+---
+节点管理工具
+
+|源文件|类|描述|
+|-----|--|---|
+|nodemngr.h,nodemngr.cpp   |CNodeManager|节点管理器|
+||CNode|节点,实体类|
+
+### 主要变量及函数
+#### 主要变量
+
+|类	|变量名称	|类型		|描述                          |
+|-------|---------------|----------|----------------|
+|CNode|ep|boost::asio::ip::tcp::endpoint|地址|
+||strName|std::string|节点名称|
+||data|boost::any|节点数据|
+||nRetries|int|重试次数|
+|CNodeManager|mapNode|std::map\<boost:..:endpoint,CNode>||节点集合
+||mapIdle|std::multimap\<int64,boost:..:endpoint>|闲置节点集合,被禁止的节点|
+
+#### 主要函数
+```cpp
+void AddNew(const boost::asio::ip::tcp::endpoint& ep,const std::string& strName,
+            const boost::any& data);//添加节点
+void Remove(const boost::asio::ip::tcp::endpoint& ep);
+std::string GetName(const boost::asio::ip::tcp::endpoint& ep);//移除节点
+bool GetData(const boost::asio::ip::tcp::endpoint& ep,boost::any& dataRet);//获取节点数据
+bool SetData(const boost::asio::ip::tcp::endpoint& ep,const boost::any& dataIn);//设置节点数据
+void Clear();//清除所有节点和数据
+void Ban(const boost::asio::ip::address& address,int64 nBanTo);//禁止指定节点
+bool Employ(boost::asio::ip::tcp::endpoint& ep);//雇佣下一个地址
+void Dismiss(const boost::asio::ip::tcp::endpoint& ep,bool fForceRetry);//闲置地址
+void Retrieve(std::vector<CNode>& vNode);//重新获取节点
+void RemoveInactiveNodes();//移除不活跃的节点(禁止时间超过28800)
+```
 
 ## XX简述
 ---
@@ -159,7 +231,7 @@ bool Attempt(int64 ts);//限制流量,稳定访问间隔,预防ddos
 
 |类	|变量名称	|类型		|描述                          |
 |-------|---------------|----------|----------------|
-|||||
+
 
 #### 主要函数
 ```cpp
