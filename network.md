@@ -29,7 +29,7 @@ const boost::asio::ip::tcp::endpoint GetLocal();//参考CIOClient
 ```
 ---
 ## PeerNet 简述
-PeerNet为基础类；定义了基本peernet的基本行为（peer配置、移除无效或错误的peer），具体构建由CNetwrok类完成。通过CEndpointManager对象对网络端点进行管理。
+PeerNet为基础类；定义了基本peernet的基本行为:包括peer的创建,配置,奖励和惩罚,以及移除无效或错误的peer,包括对peer的事件响应及针对peer的查询等功能;具体构建由CNetwrok类完成。通过CEndpointManager对象对网络端点进行管理。
 
 |源文件  	            |      类            |       描述|
 | ---------------------|-------------------|----------|
@@ -60,37 +60,37 @@ void EnterLoop();//获取配置中的peer列表，并建立连接
 void LeaveLoop();//断开所有连接中的peer,停止p2pnet
 void HeartBeat();//获取一个节点,连接
 void Timeout(uint64 nNonce,uint32 nTimerId);//节点超时移除
-bool ClientAccepted(const boost::asio::ip::tcp::endpoint& epService,CIOClient *pClient);
-bool ClientConnected(CIOClient *pClient);
-void ClientFailToConnect(const boost::asio::ip::tcp::endpoint& epRemote);
-void HostResolved(const CNetHost& host,const boost::asio::ip::tcp::endpoint& ep);
-CPeer* AddNewPeer(CIOClient *pClient,bool fInBound);
-void RewardPeer(CPeer *pPeer,const CEndpointManager::Bonus& bonus);
-void RemovePeer(CPeer *pPeer,const CEndpointManager::CloseReason& reason);
-CPeer* GetPeer(uint64 nNonce);
-void AddNewNode(const CNetHost& host);
+bool ClientAccepted(const boost::asio::ip::tcp::endpoint& epService,CIOClient *pClient);//接受客户端连接
+bool ClientConnected(CIOClient *pClient);//客户端连接
+void ClientFailToConnect(const boost::asio::ip::tcp::endpoint& epRemote);//连接失败
+void HostResolved(const CNetHost& host,const boost::asio::ip::tcp::endpoint& ep);//host状态为toremove时移除,否则添加新节点
+CPeer* AddNewPeer(CIOClient *pClient,bool fInBound);//添加新peer
+void RewardPeer(CPeer *pPeer,const CEndpointManager::Bonus& bonus);//奖励节点,减少连接延时
+void RemovePeer(CPeer *pPeer,const CEndpointManager::CloseReason& reason);//移除peer
+CPeer* GetPeer(uint64 nNonce);//获取peer
+void AddNewNode(const CNetHost& host);//添加新节点
 void AddNewNode(const boost::asio::ip::tcp::endpoint& epNode,
-                const std::string& strName = "",const boost::any& data = boost::any());
-void RemoveNode(const CNetHost& host);
-void RemoveNode(const boost::asio::ip::tcp::endpoint& epNode);
-std::string GetNodeName(const boost::asio::ip::tcp::endpoint& epNode);
-bool GetNodeData(const boost::asio::ip::tcp::endpoint& epNode,boost::any& data); 
-bool SetNodeData(const boost::asio::ip::tcp::endpoint& epNode,const boost::any& data);
-void RetrieveGoodNode(std::vector<CNodeAvail>& vGoodNode,int64 nActiveTime,std::size_t nMaxCount);
-virtual std::string GetLocalIP();
-virtual CPeer* CreatePeer(CIOClient *pClient,uint64 nNonce,bool fInBound);
-virtual void DestroyPeer(CPeer* pPeer);
-virtual CPeerInfo* GetPeerInfo(CPeer* pPeer,CPeerInfo* pInfo = NULL);
-bool HandleEvent(CWalleveEventPeerNetGetIP& eventGetIP); 
-bool HandleEvent(CWalleveEventPeerNetGetCount& eventGetCount); 
-bool HandleEvent(CWalleveEventPeerNetGetPeers& eventGetPeers); 
-bool HandleEvent(CWalleveEventPeerNetAddNode& eventAddNode); 
-bool HandleEvent(CWalleveEventPeerNetRemoveNode& eventRemoveNode); 
-bool HandleEvent(CWalleveEventPeerNetGetBanned& eventGetBanned); 
-bool HandleEvent(CWalleveEventPeerNetSetBan& eventSetBan); 
-bool HandleEvent(CWalleveEventPeerNetClrBanned& eventClrBanned);
-bool HandleEvent(CWalleveEventPeerNetReward& eventReward);
-bool HandleEvent(CWalleveEventPeerNetClose& eventClose);
+                const std::string& strName = "",const boost::any& data = boost::any());//添加新节点
+void RemoveNode(const CNetHost& host);//移除节点
+void RemoveNode(const boost::asio::ip::tcp::endpoint& epNode);//移除节点
+std::string GetNodeName(const boost::asio::ip::tcp::endpoint& epNode);//获取节点名称
+bool GetNodeData(const boost::asio::ip::tcp::endpoint& epNode,boost::any& data); //获取节点数据
+bool SetNodeData(const boost::asio::ip::tcp::endpoint& epNode,const boost::any& data);//设置节点数据
+void RetrieveGoodNode(std::vector<CNodeAvail>& vGoodNode,int64 nActiveTime,std::size_t nMaxCount);//重新获取好的节点列表
+virtual std::string GetLocalIP();//获取本地地址
+virtual CPeer* CreatePeer(CIOClient *pClient,uint64 nNonce,bool fInBound);//创建peer
+virtual void DestroyPeer(CPeer* pPeer);//销毁peer
+virtual CPeerInfo* GetPeerInfo(CPeer* pPeer,CPeerInfo* pInfo = NULL);//获取节点信息
+bool HandleEvent(CWalleveEventPeerNetGetIP& eventGetIP); //获取本地地址事件
+bool HandleEvent(CWalleveEventPeerNetGetCount& eventGetCount);//获取peer数量事件(RPC:getpeercount) 
+bool HandleEvent(CWalleveEventPeerNetGetPeers& eventGetPeers); //获取peer列表事件(RPC:listpeer)
+bool HandleEvent(CWalleveEventPeerNetAddNode& eventAddNode); //添加节点事件(RPC:addnode)
+bool HandleEvent(CWalleveEventPeerNetRemoveNode& eventRemoveNode); //移除节点事件(RPC:removenode))
+bool HandleEvent(CWalleveEventPeerNetGetBanned& eventGetBanned); //获取禁止列表事件(无RPC)
+bool HandleEvent(CWalleveEventPeerNetSetBan& eventSetBan); //禁止节点事件(无RPC)
+bool HandleEvent(CWalleveEventPeerNetClrBanned& eventClrBanned);//清空禁止节点列表事件(无RPC)
+bool HandleEvent(CWalleveEventPeerNetReward& eventReward);//奖励节点事件(添加新block和tx时触发)
+bool HandleEvent(CWalleveEventPeerNetClose& eventClose);//断开指定节点连接事件(CNetChannel中触发)
 ```
 
 ## CEndpointManager简述
@@ -160,7 +160,7 @@ void Penalize(int nPoints,int64 ts);//惩罚,降低,增加访问间隔+50
 ```
 ##### CEndpointManager类
 ```cpp
-int  GetEndpointScore(const boost::asio::ip::tcp::endpoint& ep);//获取制定地址评分
+int  GetEndpointScore(const boost::asio::ip::tcp::endpoint& ep);//获取指定地址评分
 void GetBanned(std::vector<CAddressBanned>& vBanned);//获取禁止访问的地址列表
 void SetBan(std::vector<boost::asio::ip::address>& vAddrToBan,int64 nBanTime);//禁止地址
 void ClearBanned(std::vector<boost::asio::ip::address>& vAddrToClear);//为列表中的地址解除禁止访问
