@@ -30,6 +30,7 @@ const boost::asio::ip::tcp::endpoint GetLocal();//参考CIOClient
 ---
 ## PeerNet 简述
 PeerNet为基础类；定义了基本peernet的基本行为:包括peer的创建,配置,奖励和惩罚,以及移除无效或错误的peer,包括对peer的事件响应及针对peer的查询等功能;具体构建由CNetwrok类完成。通过CEndpointManager对象对网络端点进行管理。
+##### 实现peer相关的RPC命令(getpeercount,listpeer,addnode,removenode)
 
 |源文件  	            |      类            |       描述|
 | ---------------------|-------------------|----------|
