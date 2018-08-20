@@ -1,7 +1,7 @@
 # P2P network
 
 ## CPeer简述
-  peer为p2p的基本类，通过封装CIOClient类对象实现netio;
+  peer为p2p的基本类，通过封装CIOClient类对象实现netio   (boost::asio::ip::tcp::socket);
 
 |源文件  	     |      类            |
 | -------------------|------------------- |
@@ -29,7 +29,7 @@ const boost::asio::ip::tcp::endpoint GetLocal();//参考CIOClient
 ```
 ---
 ## PeerNet 简述
-PeerNet为基础类；定义了基本peernet的基本行为:包括peer的创建,配置,奖励和惩罚,以及移除无效或错误的peer,包括对peer的事件响应及针对peer的查询等功能;具体构建由CNetwrok类完成。通过CEndpointManager对象对网络端点进行管理。
+PeerNet为基础类；定义了基本peernet的基本行为:包括peer的创建,配置,奖励和惩罚,以及移除无效或错误的peer,包括对peer的事件响应及针对peer的查询等功能;具体构建由CNetwrok类完成初始化。通过CEndpointManager对象对网络端点进行管理。
 ##### 实现peer相关的RPC命令(getpeercount,listpeer,addnode,removenode)
 
 |源文件  	            |      类            |       描述|
@@ -93,6 +93,27 @@ bool HandleEvent(CWalleveEventPeerNetClrBanned& eventClrBanned);//清空禁止�
 bool HandleEvent(CWalleveEventPeerNetReward& eventReward);//奖励节点事件(添加新block和tx时触发)
 bool HandleEvent(CWalleveEventPeerNetClose& eventClose);//断开指定节点连接事件(CNetChannel中触发)
 ```
+---
+## CMvPeerNet简述
+---
+对peernet做了更上层的封装，
+
+|源文件|类|描述|
+|-----|--|---|
+|xx.h,xx.cpp|xx|  |
+
+### 主要变量及函数
+#### 主要变量
+
+|类	|变量名称	|类型		|描述                          |
+|-------|---------------|----------|----------------|
+
+
+#### 主要函数
+```cpp
+
+```
+
 
 ## CEndpointManager简述
 ---
@@ -218,14 +239,25 @@ void Dismiss(const boost::asio::ip::tcp::endpoint& ep,bool fForceRetry);//闲置
 void Retrieve(std::vector<CNode>& vNode);//重新获取节点
 void RemoveInactiveNodes();//移除不活跃的节点(禁止时间超过28800)
 ```
+---
 
+
+
+
+|整理者|日期|
+|---|--|
+|xp|TODO|
+
+
+
+---
 ## XX简述
 ---
 ////
 
 |源文件|类|描述|
 |-----|--|---|
-|xx.h,xx.cpp   |xx             |  |
+|xx.h,xx.cpp|xx|  |
 
 ### 主要变量及函数
 #### 主要变量
@@ -242,6 +274,3 @@ void RemoveInactiveNodes();//移除不活跃的节点(禁止时间超过28800)
 上层组网主要是靠 CNetwork，包括
 
 
-|整理者|日期|
-|---|--|
-|xp|201808|

@@ -1,0 +1,88 @@
+0820 
+地址列表:连接到自己的地址,合法地址列表,
+
+筛选(可链接,主链block的区块数量核实)
+局域网地址需要过滤.
+
+已有:节点评分 高度作为优先级的参数
+列表传播 
+建立链接--获取列表--断开链接(此连接不接收其他消息)握手就有高度
+每次链接新节点的时候获取一次地址列表
+定时筛选 (天)
+
+发送地址列表筛选可以参照BTC
+
+resyncwalleve 
+
+
+
+transaction data to be continue.
+
+0815
+晓东:
+0.增加RPC命令(快捷组装data等操作)   
+1.分支子链代码完成
+2.交易签名代码检查
+
+
+0814
+晓东:
+1.交易签名失败
+	正确姿势：用listkey中的key生成钱包地址
+	
+2.创建分支的使用方法
+	
+
+
+LWS
+0.接口1，注册。可用多个地址注册多个分支
+1.{$DEVICE} 每个设备对应自己的topic
+2.UTXO tx输出
+
+协议版本，服务类型
+
+
+
+0.私钥存储在Iot设备，Iot设备具有签名的能力。Iot不介入节点网络，通过LWS.
+1.分支可以根据重复块高度来判定。
+2.矿工费不足的情况暂时放一下，情况可能较为复杂。（矿池）
+3.由LWS保证一致性，wallet推送新数据，也提供获取的通道。(确定)
+
+
+0802
+需：
+0.系统设计结构
+1.
+txpool确认。
+socket，没有出乎想象。
+trust值是所有块累加的，对比高度信息可以确认是否是最长链
+安全高度
+
+
+
+---------------------------------------------------------------------------------------
+系统结构
+walleve底层库。工具类管理类 
+	http 支持rpc
+mpvss dpos共识算法（实现）
+crypot 加密相关
+storage txdata blockdata key 0.入库mysql，1.硬盘文件
+network P2P网络的封装
+common tx block 等基本数据结构定义
+src 主要实现目录
+	程序入口，加载方式，上层定义的事件，参图，
+	config.cpp命令行和参数 
+	core验证，txpool，worldline,
+	dispatcher.cpp ,network.cpp更上层的调用
+	schedule.cpp底层之上的数据同步行为等.
+	wallet.cpp 缺省的用户钱包，
+	service.cpp 隔绝外部所提供的接口，RPC也是通过这里来调用的
+	rpcclient.cpp 提供命令行工具，和钱包的rpcservic是对应的。
+还实现了命令行的console.
+
+block 文件存储的作用
+
+
+ssh fnfn@kmd.psay.me -i /home/xp/.ssh/multiverse-testnet
+
+	
