@@ -1,0 +1,96 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, ST=CA, L=LA, O=private vps, OU=MyVPS, CN=xp/name=server/emailAddress=xp@vps.mydomain
+        Validity
+            Not Before: Aug 21 14:01:00 2018 GMT
+            Not After : Aug 18 14:01:00 2028 GMT
+        Subject: C=US, ST=CA, L=LA, O=private vps, OU=MyVPS, CN=client1/name=vps_server/emailAddress=xp@vps.mydomain
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:c7:2e:5e:44:bc:0e:e5:7d:22:77:b2:96:69:63:
+                    cb:24:bf:29:af:86:02:e1:e1:fc:3a:5b:ff:b2:8e:
+                    42:eb:a0:05:f7:51:36:bd:9e:a4:19:a1:c3:85:c9:
+                    6f:f8:a5:d2:6a:3a:32:ab:5f:63:a8:5b:81:c6:47:
+                    d9:3f:f8:91:f7:09:a9:09:3b:ed:5c:18:68:19:76:
+                    2b:06:77:49:d3:27:e0:c9:1c:94:76:01:f8:ec:5b:
+                    cc:b6:77:02:c4:2f:ee:17:1c:b7:e8:52:b1:c4:13:
+                    e7:7b:d2:f2:0a:2b:8b:02:59:e3:b3:a6:68:6f:b4:
+                    33:79:ac:bf:00:4e:06:8f:63:bf:e8:02:71:af:33:
+                    9a:c7:93:08:b4:45:a0:57:1a:61:82:0a:3e:da:5b:
+                    bc:8a:75:9f:68:e9:dc:79:69:ff:b4:eb:71:a2:54:
+                    6c:36:6d:e9:e5:63:a8:32:53:cd:a6:92:5b:d1:35:
+                    62:03:12:d3:65:71:da:29:34:ac:52:74:0e:c2:f8:
+                    69:85:1c:fc:cb:07:61:e8:ae:a4:f8:31:26:fa:73:
+                    c2:c3:0a:16:98:98:ab:3f:b3:a1:7b:fa:2f:97:e5:
+                    97:c1:71:8c:a7:ee:8e:0b:9b:ae:8c:96:40:34:30:
+                    6a:0a:6a:a0:0e:0e:9b:dd:de:9c:eb:72:4f:14:ea:
+                    5a:df
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                3B:B8:92:06:FC:8B:6A:38:7C:69:AC:29:E4:1C:A2:05:72:3C:30:F1
+            X509v3 Authority Key Identifier: 
+                keyid:98:B8:A0:B4:36:99:F4:F4:97:B9:BD:1E:64:54:CB:4A:CB:2A:43:B5
+                DirName:/C=US/ST=CA/L=LA/O=private vps/OU=MyVPS/CN=xp/name=server/emailAddress=xp@vps.mydomain
+                serial:88:AC:57:58:93:4C:AD:27
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+            X509v3 Subject Alternative Name: 
+                DNS:client1
+    Signature Algorithm: sha256WithRSAEncryption
+         2f:81:c6:5f:44:89:10:08:75:46:2c:00:80:62:07:88:4e:b3:
+         55:2c:53:22:ed:98:b8:c6:41:6c:d6:71:7e:ea:ee:00:36:2b:
+         cd:97:85:ac:35:63:d2:d4:21:bd:1d:48:54:57:b4:24:7c:f3:
+         7a:ec:38:a3:18:45:1d:b2:5a:d6:7d:19:a4:06:39:81:49:e4:
+         af:5e:6f:36:b5:1f:d7:fb:2d:58:41:69:14:f2:29:cc:22:07:
+         7e:05:14:17:00:a7:eb:22:2d:ef:2d:c6:bb:19:72:5f:09:e8:
+         6b:37:38:9e:ff:eb:bb:05:28:fe:86:18:de:b4:8d:d4:c6:58:
+         37:77:ab:f6:2a:64:c9:f8:34:98:61:c5:f4:be:93:20:a6:fb:
+         70:aa:0e:9e:5a:3b:26:71:34:c3:fd:78:6d:40:2d:47:ad:3c:
+         70:68:06:72:76:a5:83:7a:f2:40:66:96:5f:04:89:71:1c:3d:
+         b1:e8:fe:ff:f3:c1:e0:1c:7b:82:2a:fb:d6:8c:d9:5e:0c:6a:
+         d6:14:fe:45:c8:17:31:d3:c3:e7:93:e3:e8:90:b9:9c:4e:20:
+         95:9d:06:d3:37:25:39:88:49:15:a4:cd:8c:f1:f6:b7:07:25:
+         fe:bb:f2:f8:4d:13:9c:a7:16:1c:e0:ac:33:cb:d9:bc:40:5f:
+         20:72:bd:66
+-----BEGIN CERTIFICATE-----
+MIIE9DCCA9ygAwIBAgIBAjANBgkqhkiG9w0BAQsFADCBizELMAkGA1UEBhMCVVMx
+CzAJBgNVBAgTAkNBMQswCQYDVQQHEwJMQTEUMBIGA1UEChMLcHJpdmF0ZSB2cHMx
+DjAMBgNVBAsTBU15VlBTMQswCQYDVQQDEwJ4cDEPMA0GA1UEKRMGc2VydmVyMR4w
+HAYJKoZIhvcNAQkBFg94cEB2cHMubXlkb21haW4wHhcNMTgwODIxMTQwMTAwWhcN
+MjgwODE4MTQwMTAwWjCBlDELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMQswCQYD
+VQQHEwJMQTEUMBIGA1UEChMLcHJpdmF0ZSB2cHMxDjAMBgNVBAsTBU15VlBTMRAw
+DgYDVQQDEwdjbGllbnQxMRMwEQYDVQQpFAp2cHNfc2VydmVyMR4wHAYJKoZIhvcN
+AQkBFg94cEB2cHMubXlkb21haW4wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDHLl5EvA7lfSJ3spZpY8skvymvhgLh4fw6W/+yjkLroAX3UTa9nqQZocOF
+yW/4pdJqOjKrX2OoW4HGR9k/+JH3CakJO+1cGGgZdisGd0nTJ+DJHJR2AfjsW8y2
+dwLEL+4XHLfoUrHEE+d70vIKK4sCWeOzpmhvtDN5rL8ATgaPY7/oAnGvM5rHkwi0
+RaBXGmGCCj7aW7yKdZ9o6dx5af+063GiVGw2benlY6gyU82mklvRNWIDEtNlcdop
+NKxSdA7C+GmFHPzLB2HorqT4MSb6c8LDChaYmKs/s6F7+i+X5ZfBcYyn7o4Lm66M
+lkA0MGoKaqAODpvd3pzrck8U6lrfAgMBAAGjggFWMIIBUjAJBgNVHRMEAjAAMC0G
+CWCGSAGG+EIBDQQgFh5FYXN5LVJTQSBHZW5lcmF0ZWQgQ2VydGlmaWNhdGUwHQYD
+VR0OBBYEFDu4kgb8i2o4fGmsKeQcogVyPDDxMIHABgNVHSMEgbgwgbWAFJi4oLQ2
+mfT0l7m9HmRUy0rLKkO1oYGRpIGOMIGLMQswCQYDVQQGEwJVUzELMAkGA1UECBMC
+Q0ExCzAJBgNVBAcTAkxBMRQwEgYDVQQKEwtwcml2YXRlIHZwczEOMAwGA1UECxMF
+TXlWUFMxCzAJBgNVBAMTAnhwMQ8wDQYDVQQpEwZzZXJ2ZXIxHjAcBgkqhkiG9w0B
+CQEWD3hwQHZwcy5teWRvbWFpboIJAIisV1iTTK0nMBMGA1UdJQQMMAoGCCsGAQUF
+BwMCMAsGA1UdDwQEAwIHgDASBgNVHREECzAJggdjbGllbnQxMA0GCSqGSIb3DQEB
+CwUAA4IBAQAvgcZfRIkQCHVGLACAYgeITrNVLFMi7Zi4xkFs1nF+6u4ANivNl4Ws
+NWPS1CG9HUhUV7QkfPN67DijGEUdslrWfRmkBjmBSeSvXm82tR/X+y1YQWkU8inM
+Igd+BRQXAKfrIi3vLca7GXJfCehrNzie/+u7BSj+hhjetI3Uxlg3d6v2KmTJ+DSY
+YcX0vpMgpvtwqg6eWjsmcTTD/XhtQC1HrTxwaAZydqWDevJAZpZfBIlxHD2x6P7/
+88HgHHuCKvvWjNleDGrWFP5FyBcx08Pnk+PokLmcTiCVnQbTNyU5iEkVpM2M8fa3
+ByX+u/L4TROcpxYc4Kwzy9m8QF8gcr1m
+-----END CERTIFICATE-----
