@@ -31,12 +31,13 @@ public:
     DNSeedDB();
     ~DNSeedDB();
 
+    bool init(const CMvDBConfig& config);
     bool insertNode(SeedNode &node);
     bool deleteNode(SeedNode &node);
     bool updateNodeScore(SeedNode &node);
     bool selectAllNode(std::vector<SeedNode> & nodeList);
+    SeedNode* findOneWithAddress(std::string ip);
 private:
-    bool init(const CMvDBConfig& config);
     void deinit();
     bool CreateTable();
 protected:

@@ -7,30 +7,22 @@
 #include "walleve/walleve.h"
 #include "dnseeddb.h"
 
-//class multiverse::storage::DNSeedDB;
+
 namespace multiverse 
 {
 
 namespace network
 {
 
-// struct SeedNode{
-//     SeedNode(){}
-//     SeedNode(boost::asio::ip::tcp::endpoint ep,int score=0)
-//     {
-//         this->_ep=ep;
-//         this->_score=score;
-//     }
 
-//     int _id;
-//     boost::asio::ip::tcp::endpoint _ep;
-//     int _score;
-// };
-
-class DNSeedServer:public IWalleveBase{
+class DNSeedServer:public walleve::IWalleveBase 
+{
 public: 
     DNSeedServer(){
+        _isDNSeedServerNode=false;
         _initTime=walleve::GetTime();
+        _runTime=0;
+        init();
     } 
     ~DNSeedServer(){}
 public:
@@ -38,22 +30,26 @@ public:
         GET_ALL,
         GET_A_LOT
     };
-    void getAddressList(std::vector<SeedNode> & list,GetNodeWay gettype=GET_A_LOT);
+    void getAddressList(std::vector<storage::SeedNode> & list,GetNodeWay gettype=GET_A_LOT);
     bool add2list(boost::asio::ip::tcp::endpoint newep);
-    void switchAddressList(std::vector<SeedNode> epList);
+    void switchAddressList(std::vector<storage::SeedNode> epList);
+
+    static int test();
+    storage::DNSeedDB * testGetDb(){return &_db;}
 private:
-    void init();
+    bool init();
     void filterAddressList();
     bool hasAddress(boost::asio::ip::tcp::endpoint ep);
-    bool updateScore(SeedNode node);
-private:
-    std::vector<SeedNode> _nodeList;
-    bool _isDNSeedServerNode=false;
+    bool updateScore(storage::SeedNode node);
 
-    storage::DNSeedDB _db;
+private:
+    std::vector<storage::SeedNode> _nodeList;
+    bool _isDNSeedServerNode;
+
+    multiverse::storage::DNSeedDB _db;
     //timer
     int64 _initTime;
-    int64 _runTime=0;
+    int64 _runTime;
 //advanced
     //定时任务
 

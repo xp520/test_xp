@@ -1,22 +1,27 @@
 // Copyright (c) 2017-2018 The Multiverse developers xp@fnfn
 #include "dnseedserver.h"
 
+
 using namespace walleve;
+using namespace multiverse;
 using namespace multiverse::network;
+using namespace multiverse::storage;
 
 #define TIMING_FILTER_INTERVAL (24*60*60)
 #define SEND_ADDRESS_LIMIT 50
 
-void DNSeedServer::init()
+bool DNSeedServer::init()
 {
-    storage::CMvDBConfig dbConfig(StorageConfig()->strDBHost,StorageConfig()->nDBPort,
-                                  StorageConfig()->strDBName,StorageConfig()->strDBUser,StorageConfig()->strDBPass);
+    //const CMvStorageConfig * config=dynamic_cast<const CMvStorageConfig *>(IWalleveBase::WalleveConfig());
+    CMvDBConfig dbConfig("127.0.0.1",3306,"multiverse","multiverse","multiverse");
     if(!_db.init(dbConfig))
     {
         WalleveLog("Failed to initialize DNSeed database\n");
         return false;
     }
     //load _a
+
+    return true;
 }
 
 bool DNSeedServer::add2list(boost::asio::ip::tcp::endpoint newep)
@@ -33,7 +38,7 @@ bool DNSeedServer::add2list(boost::asio::ip::tcp::endpoint newep)
 
 void DNSeedServer::getAddressList(std::vector<SeedNode> & list,GetNodeWay gettype)
 {
-    if(gettype==GetNodeWay::GET_ALL)
+    if(gettype==GET_ALL)
     {
         list=_nodeList;
     }
@@ -57,10 +62,11 @@ bool DNSeedServer::hasAddress(boost::asio::ip::tcp::endpoint ep)
 
 void DNSeedServer::switchAddressList(std::vector<SeedNode> epList)
 {
-    for(SeedNode sa :epList)
+    for(size_t i=0;i<epList.size();i++)
     {
-        if(this->hasAddress(sa._ep)) continue;
-        else _nodeList.push_back(SeedNode(sa._ep));
+        SeedNode * sa=&epList[i];
+        if(this->hasAddress(sa->_ep)) continue;
+        else _nodeList.push_back(SeedNode(sa->_ep));
     }
 }
 
@@ -75,4 +81,25 @@ void DNSeedServer::filterAddressList()
 bool DNSeedServer::updateScore(SeedNode node)
 {
     
+}
+
+int DNSeedServer::test()
+{
+    /* code */
+    DNSeedServer dnseed;
+    DNSeedDB* db=dnseed.testGetDb();
+
+    // boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address().from_string("174.137.61.150"),1111);
+    // SeedNode node(ep);
+    
+    // bool rzt=db->insertNode(node);
+
+    // node._score=999;
+    // bool rzt1=db->updateNodeScore(node);
+
+    std::vector<SeedNode> list;
+    db->selectAllNode(list);
+   SeedNode* a=db->findOneWithAddress("174.137.61.150");
+    
+    return 0;
 }
