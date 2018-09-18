@@ -17,8 +17,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_DIR})
 set(CMAKE_CXX_STANDARD 11)
 
 # packages
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
 find_package(Boost 1.58.0 REQUIRED COMPONENTS
     program_options
     filesystem
@@ -27,21 +25,8 @@ find_package(Boost 1.58.0 REQUIRED COMPONENTS
     date_time
     regex
 )
-find_package(OpenSSL 1.0.0 REQUIRED) 
-find_package(MySQL 5.7.20 REQUIRED)
-find_package(sodium 1.0.8 REQUIRED)
-find_package(Readline 5.0 REQUIRED)
 
-if(${USE_SSL_110} MATCHES "TRUE")
-    add_definitions(-DUSE_SSL_110)
-endif(${USE_SSL_110} MATCHES "TRUE")
 
-# libs
-if(WIN32)
-    add_definitions(-DWIN32_LEAN_AND_MEAN)
-    find_library(WS2_32_LIB NAMES ws2_32)
-    find_library(WSSOCK32_LIB NAMES wsock32)
-endif()
 
 # sub directories
-add_subdirectory(classes)
+add_subdirectory(src)
