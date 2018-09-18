@@ -18,7 +18,7 @@
   * 普通节点不会去主动测试地址列表，是通过和节点握手成功数以及交换消息的有效性给节点评分
 
 #### TODO 
-  * 高度的评分机制
+  
   * 测试(V6)
 
 #### DONE
@@ -30,6 +30,7 @@
   * 连接获取的地址列表中节点
   * 定时任务(筛选)
   * 连接失败地址达到最大尝试次数移除,最大尝试次数可配置
+  * 高度的评分机制
 
 
 #### 要点新
@@ -78,19 +79,21 @@ DNSeed地址也可从配置项中来
 
 
 #### 疑问
-* 可信节点怎么建立:通过配置
+* dnseed服务地址也可从配置读取 
+* 可信节点建立:通过配置 
 * 如果没有配置可信节点,则在列表连接测试时推测出可信高度.
-**** 高度作为评分标准,高度作为列表优先抽取的标准
+* 高度作为评分标准,高度作为列表优先抽取的标准 
 
 连接数量的压力测试,压力测试客户端
 
+##### 其他
+推测高度优化
+可信节点不能连接本地
+###
 暂不考虑X 端口
 暂不考虑X 分支节点相关的DNSeed路由
 暂不考虑X DNSeed服务之间交换列表(是否需要)
-##### 侵入原因
-* network 获取数据库配置,连接失败消息捕获,初始化dnseedservice
-* mvpeernet 保存节点地址列表(可以在peer中拦截处理)
-* CMvPeer 没有侵入
 
 
+* the dnseed service address can also be read from the configuration.* trusted node establishment: by configuration.* if the trusted node is not configured, the trusted height is inferred when the list connection is tested. * height is used as the scoring standard, and height is used as the criteria for priority extraction of list
 
